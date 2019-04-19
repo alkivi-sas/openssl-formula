@@ -10,6 +10,7 @@
 {%- set email = config.get('email', 'admin@alkivi.fr') %}
 {%- set key = path ~ '/' ~ name ~ '.key' %}
 {%- set cert = path ~ '/' ~ name ~ '.crt' %}
+{%- set require_in = config.get('require_in', False) %}
 {{ path }}:
   file.directory:
     - user: {{ config.get('user', 'root') }}
@@ -28,4 +29,10 @@
     - name: openssl req -new -x509 -days {{ days }} -nodes -out {{ cert }} -keyout {{ key }} -subj '/C={{ country }}/ST={{ state }}/L={{ locality }}/O={{ organization }}/OU={{ unit }}/CN={{ commonname }}/emailAddress={{ email }}'
     - require:
       - file: {{ path }}
+    {% if require_in %}
+    - require_in:
+      {% for req_name, req_id in require_in.items() %}
+      - {{ req_name }}: {{ req_id }}
+      {% endfor %}
+    {% endif %}
 {%- endmacro -%}
