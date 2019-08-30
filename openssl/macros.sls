@@ -14,7 +14,7 @@
 {{ path }}:
   file.directory:
     - user: {{ config.get('user', 'root') }}
-    - group: {{ config.get('group', 'ssl-cert') }}
+    - group: {{ config.get('group', 'root') }}
     - makedirs: True
     - dir_mode: {{ config.get('mode', 755) }}
     - file_mode: {{ config.get('file_mode', 644) }}
